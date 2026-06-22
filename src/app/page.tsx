@@ -122,7 +122,7 @@ function Note({
 }) {
   return (
     <div
-      className={`absolute w-52 rounded-2xl border border-ink/10 p-4 shadow-[0_10px_30px_-12px_rgba(44,38,34,0.35)] ${className}`}
+      className={`absolute w-44 rounded-2xl border border-ink/10 p-4 shadow-[0_10px_30px_-12px_rgba(44,38,34,0.35)] sm:w-52 ${className}`}
     >
       <p className="font-display text-base font-semibold text-ink">{title}</p>
       <ul className="mt-2 space-y-1.5 text-sm text-ink/75">

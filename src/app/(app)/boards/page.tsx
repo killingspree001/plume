@@ -27,9 +27,9 @@ export default function BoardsPage() {
 
   return (
     <div>
-      <div className="mb-8 flex items-end justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-ink">
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Your boards
           </h1>
           <p className="mt-1 text-ink/60">
@@ -38,7 +38,7 @@ export default function BoardsPage() {
         </div>
         <button
           onClick={() => setComposing((v) => !v)}
-          className="rounded-full bg-clay-500 px-5 py-2.5 font-semibold text-paper shadow-sm transition hover:bg-clay-600"
+          className="shrink-0 self-start rounded-full bg-clay-500 px-5 py-2.5 font-semibold text-paper shadow-sm transition hover:bg-clay-600 sm:self-auto"
         >
           {composing ? "Close" : "New board"}
         </button>

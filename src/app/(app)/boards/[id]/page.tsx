@@ -138,12 +138,12 @@ function BoardHeader({
               onBlur={save}
               onKeyDown={(e) => e.key === "Enter" && save()}
               autoFocus
-              className="bg-transparent font-display text-3xl font-semibold text-ink outline-none"
+              className="w-full min-w-0 bg-transparent font-display text-2xl font-semibold text-ink outline-none sm:text-3xl"
             />
           ) : (
             <h1
               onClick={() => isOwner && setEditing(true)}
-              className={`font-display text-3xl font-semibold tracking-tight text-ink ${
+              className={`font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl ${
                 isOwner ? "cursor-text" : ""
               }`}
             >
@@ -227,16 +227,16 @@ function Composer({
   return (
     <form
       onSubmit={submit}
-      className="mb-8 rounded-2xl border border-ink/10 bg-paper p-3 shadow-sm"
+      className="mb-8 rounded-2xl border border-ink/10 bg-paper p-2.5 shadow-sm sm:p-3"
     >
-      <div className="flex items-center gap-2">
-        <div className="flex rounded-full bg-cream p-1 text-sm font-semibold">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="flex self-start rounded-full bg-cream p-1 text-sm font-semibold">
           {(["note", "task"] as CardKind[]).map((k) => (
             <button
               key={k}
               type="button"
               onClick={() => setKind(k)}
-              className={`rounded-full px-3 py-1 capitalize transition ${
+              className={`rounded-full px-4 py-1 capitalize transition sm:px-3 ${
                 kind === k ? "bg-clay-500 text-paper" : "text-ink/50"
               }`}
             >
@@ -244,20 +244,22 @@ function Composer({
             </button>
           ))}
         </div>
-        <input
-          ref={inputRef}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder={kind === "task" ? "Add a to-do…" : "Write a note…"}
-          className="flex-1 bg-transparent px-2 py-1.5 text-ink outline-none placeholder:text-ink/30"
-        />
-        <button
-          type="submit"
-          disabled={!text.trim()}
-          className="rounded-full bg-clay-500 px-4 py-1.5 text-sm font-semibold text-paper transition hover:bg-clay-600 disabled:opacity-40"
-        >
-          Add
-        </button>
+        <div className="flex flex-1 items-center gap-2">
+          <input
+            ref={inputRef}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder={kind === "task" ? "Add a to-do…" : "Write a note…"}
+            className="w-full min-w-0 flex-1 bg-transparent px-2 py-1.5 text-ink outline-none placeholder:text-ink/30"
+          />
+          <button
+            type="submit"
+            disabled={!text.trim()}
+            className="shrink-0 rounded-full bg-clay-500 px-5 py-1.5 text-sm font-semibold text-paper transition hover:bg-clay-600 disabled:opacity-40"
+          >
+            Add
+          </button>
+        </div>
       </div>
     </form>
   );
