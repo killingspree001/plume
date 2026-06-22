@@ -34,7 +34,7 @@ function Nav() {
         </Link>
         <Link
           href="/login"
-          className="rounded-full bg-clay-500 px-5 py-2 font-semibold text-paper shadow-sm transition hover:bg-clay-600"
+          className="rounded-full bg-clay-500 px-5 py-2 font-semibold text-paper shadow-sm transition hover:-translate-y-0.5 hover:bg-clay-600 hover:shadow-md"
         >
           Start writing
         </Link>
@@ -46,8 +46,12 @@ function Nav() {
 function Hero() {
   return (
     <section className="mx-auto grid max-w-5xl items-center gap-12 px-6 pb-10 pt-12 lg:grid-cols-2 lg:pt-20">
-      <div>
+      <div className="animate-in">
         <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-clay-200 bg-clay-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-clay-700">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-clay-500 opacity-70" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-clay-500" />
+          </span>
           Live &amp; shared
         </p>
         <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl">
@@ -63,7 +67,7 @@ function Hero() {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/login"
-            className="rounded-full bg-clay-500 px-6 py-3 text-center font-semibold text-paper shadow-sm transition hover:bg-clay-600"
+            className="rounded-full bg-clay-500 px-6 py-3 text-center font-semibold text-paper shadow-sm transition hover:-translate-y-0.5 hover:bg-clay-600 hover:shadow-md"
           >
             Start writing — free
           </Link>
@@ -83,62 +87,88 @@ function Hero() {
 
 function NoteCollage() {
   return (
-    <div className="relative h-80 select-none sm:h-96">
+    <div className="relative h-80 select-none animate-in sm:h-96">
       <Note
-        className="left-2 top-4 -rotate-3 bg-paper"
+        position="left-2 top-4"
+        rotate="-rotate-3"
+        bg="bg-paper"
+        delay={0}
         title="Groceries"
         lines={["Sourdough", "Olive oil", "Figs & honey"]}
       />
       <Note
-        className="right-3 top-0 rotate-2 bg-honey-100"
+        position="right-3 top-0"
+        rotate="rotate-2"
+        bg="bg-honey-100"
+        delay={900}
         title="Today"
         lines={["Call the framer", "Ship the draft", "Water the plants"]}
         checks
       />
       <Note
-        className="bottom-2 left-10 rotate-1 bg-clay-50"
+        position="bottom-2 left-10"
+        rotate="rotate-1"
+        bg="bg-clay-50"
+        delay={1800}
         title="Ideas"
         lines={["A slower notebook", "Warmer colors", "Less, but better"]}
       />
       <div className="absolute bottom-6 right-6 flex items-center gap-1 rounded-full border border-ink/10 bg-paper px-3 py-1.5 text-xs font-semibold text-ink/70 shadow-sm">
         <Avatar letter="A" className="bg-clay-500" />
         <Avatar letter="M" className="-ml-2 bg-honey-400" />
-        <span className="ml-1">2 here now</span>
+        <span className="ml-1 flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
+          2 here now
+        </span>
       </div>
     </div>
   );
 }
 
 function Note({
-  className,
+  position,
+  rotate,
+  bg,
+  delay,
   title,
   lines,
   checks,
 }: {
-  className: string;
+  position: string;
+  rotate: string;
+  bg: string;
+  delay: number;
   title: string;
   lines: string[];
   checks?: boolean;
 }) {
   return (
-    <div
-      className={`absolute w-44 rounded-2xl border border-ink/10 p-4 shadow-[0_10px_30px_-12px_rgba(44,38,34,0.35)] sm:w-52 ${className}`}
-    >
-      <p className="font-display text-base font-semibold text-ink">{title}</p>
-      <ul className="mt-2 space-y-1.5 text-sm text-ink/75">
-        {lines.map((line) => (
-          <li key={line} className="flex items-center gap-2">
-            {checks ? (
-              <span className="flex h-4 w-4 items-center justify-center rounded border border-clay-300 text-[10px] text-clay-500">
-                ✓
-              </span>
-            ) : (
-              <span className="h-1.5 w-1.5 rounded-full bg-clay-400" />
-            )}
-            {line}
-          </li>
-        ))}
-      </ul>
+    <div className={`absolute ${position}`}>
+      <div className={rotate}>
+        <div className="float" style={{ animationDelay: `${delay}ms` }}>
+          <div
+            className={`w-44 rounded-2xl border border-ink/10 p-4 shadow-[0_14px_34px_-12px_rgba(44,38,34,0.4)] transition-transform hover:scale-[1.03] sm:w-52 ${bg}`}
+          >
+            <p className="font-display text-base font-semibold text-ink">
+              {title}
+            </p>
+            <ul className="mt-2 space-y-1.5 text-sm text-ink/75">
+              {lines.map((line) => (
+                <li key={line} className="flex items-center gap-2">
+                  {checks ? (
+                    <span className="flex h-4 w-4 items-center justify-center rounded border border-clay-300 text-[10px] text-clay-500">
+                      ✓
+                    </span>
+                  ) : (
+                    <span className="h-1.5 w-1.5 rounded-full bg-clay-400" />
+                  )}
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -161,7 +191,7 @@ function Features() {
 
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="stagger grid gap-6 md:grid-cols-3">
         {items.map((item) => (
           <div
             key={item.title}
@@ -210,7 +240,7 @@ function Closing() {
       </p>
       <Link
         href="/login"
-        className="mt-7 inline-block rounded-full bg-clay-500 px-7 py-3 font-semibold text-paper shadow-sm transition hover:bg-clay-600"
+        className="mt-7 inline-block rounded-full bg-clay-500 px-7 py-3 font-semibold text-paper shadow-sm transition hover:-translate-y-0.5 hover:bg-clay-600 hover:shadow-md"
       >
         Start writing
       </Link>
