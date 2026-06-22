@@ -1,0 +1,51 @@
+rules_version = '2';
+
+// Plume security rules.
+// Paste into the Firebase console: Firestore Database -> Rules -> Publish.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function board(boardId) {
+      return get(/databases/$(database)/documents/boards/$(boardId)).data;
+    }
+
+    // You can touch a board's contents if you own it or it's been shared.
+    function canAccess(boardId) {
+      return signedIn() &&
+        (board(boardId).ownerId == request.auth.uid || board(boardId).shared == true);
+    }
+
+    // Each person's profile is private to them.
+    match /users/{uid} {
+      allow read, create, update: if signedIn() && request.auth.uid == uid;
+      allow delete: if false;
+    }
+
+    match /boards/{boardId} {
+      // The owner always sees their board; everyone else only if it's shared.
+      allow read: if signedIn() &&
+        (resource.data.ownerId == request.auth.uid || resource.data.shared == true);
+      allow create: if signedIn() &&
+        request.resource.data.ownerId == request.auth.uid;
+      // Only the owner can rename, share, or delete a board.
+      allow update, delete: if signedIn() &&
+        resource.data.ownerId == request.auth.uid;
+
+      // Notes and to-dos: anyone with access can read and write them live.
+      match /cards/{cardId} {
+        allow read, write: if canAccess(boardId);
+      }
+
+      // Presence: read who's here; you may only write your own marker.
+      match /presence/{personId} {
+        allow read: if canAccess(boardId);
+        allow write: if canAccess(boardId) && request.auth.uid == personId;
+      }
+    }
+  }
+}
